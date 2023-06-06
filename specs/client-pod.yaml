@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
   - name: client
-    image: quay.io/jvdm/stackrox-dev:go-grpc-lb-poc-client
+    image: quay.io/rtannenb/qa:go-grpc-lb-poc-client
     imagePullPolicy: Always
     env:
     - name: SERVER_HOSTNAME

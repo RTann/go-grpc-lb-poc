@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: server
-        image: quay.io/jvdm/stackrox-dev:go-grpc-lb-poc-server
+        image: quay.io/rtannenb/qa:go-grpc-lb-poc-server
         imagePullPolicy: Always
         ports:
         - containerPort: 5000

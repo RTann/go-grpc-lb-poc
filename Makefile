@@ -13,13 +13,13 @@ proto: api/api.proto proto-install
 # Images
 # ------
 
-images-registry := quay.io/jvdm/stackrox-dev
+images-registry := quay.io/rtannenb/qa
 images-tag-prefix := go-grpc-lb-poc
 
 .PHONY: images
 images: images-server images-client
 images-%: images/%.Dockerfile
-	podman build -f $< -t $(images-registry):$(images-tag-prefix)-$(<F:.Dockerfile=) .
+	docker build -f $< -t $(images-registry):$(images-tag-prefix)-$(<F:.Dockerfile=) .
 
 # Deploy
 # ------
