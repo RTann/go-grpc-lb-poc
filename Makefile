@@ -1,14 +1,14 @@
+include make/proto.mk
+
 all: images
 
 # Protos
 # ------
 
 .PHONY: proto
-proto: api/api.proto
-	protoc \
-	    --go_out=. --go_opt=paths=source_relative \
-	    --go-grpc_out=. --go-grpc_opt=paths=source_relative \
-	    $<
+proto: api/api.proto proto-install
+	mkdir -p generated
+	PATH=$(PROTO_BIN) && $(PROTOC) -I=api/ --go_out=generated/ --go-grpc_out=generated/ api/*
 
 # Images
 # ------

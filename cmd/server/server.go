@@ -9,22 +9,23 @@ import (
 	"os"
 	"time"
 
-	pb "github.com/jvdm/go-grpc-lb-poc/api"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/keepalive"
 
+	pb "github.com/jvdm/go-grpc-lb-poc/generated/api"
 	"github.com/jvdm/go-grpc-lb-poc/metrics"
 )
 
 type server struct {
 	pb.UnimplementedPocServiceServer
-	serverID string
+	serverID  string
 	startTime int64
 }
 
 func NewServer(id string) *server {
 	return &server{
-		serverID: id,
+		serverID:  id,
 		startTime: time.Now().Unix(),
 	}
 }
@@ -53,7 +54,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("getting hostname: %v", err)
 	}
-	
 
 	listen, err := net.Listen("tcp", ":5000")
 	if err != nil {
@@ -61,7 +61,9 @@ func main() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
-	s := grpc.NewServer()
+	s := grpc.NewServer(grpc.KeepaliveParams(keepalive.ServerParameters{
+		MaxConnectionAge: 10 * time.Minute,
+	}))
 	pb.RegisterPocServiceServer(s, NewServer(serverID))
 
 	// Start metrics server

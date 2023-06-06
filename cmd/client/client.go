@@ -8,10 +8,11 @@ import (
 	"os"
 	"time"
 
-	pb "github.com/jvdm/go-grpc-lb-poc/api"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
+	pb "github.com/jvdm/go-grpc-lb-poc/generated/api"
 	"github.com/jvdm/go-grpc-lb-poc/metrics"
 )
 
@@ -26,8 +27,8 @@ func main() {
 		serverHostname = "localhost"
 	}
 	log.Printf("Connecting to server: %s...", serverHostname)
-	conn, err := grpc.Dial("dns:///" + serverHostname + ":5000",
-		grpc.WithInsecure(),
+	conn, err := grpc.Dial("dns:///"+serverHostname+":5000",
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"[{"round_robin": {}}]"}`),
 	)
 	if err != nil {
