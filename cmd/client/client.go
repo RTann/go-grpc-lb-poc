@@ -29,7 +29,7 @@ func main() {
 	log.Printf("Connecting to server: %s...", serverHostname)
 	conn, err := grpc.Dial("dns:///"+serverHostname+":5000",
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"[{"round_robin": {}}]"}`),
+		grpc.WithDefaultServiceConfig(`{"loadBalancingConfig": [{"round_robin": {}}]}`),
 	)
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
