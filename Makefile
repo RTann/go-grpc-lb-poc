@@ -36,3 +36,8 @@ deploy: $(addprefix specs/,$(deploy-specs))
 	-oc create ns $(deploy-namespace)
 	oc label --overwrite=true namespace/$(deploy-namespace) openshift.io/cluster-monitoring=true
 	for f in $^; do kubectl -n $(deploy-namespace) apply -f $$f; done
+
+.PHONY: teardown
+teardown: $(addprefix specs/,$(deploy-specs))
+	for f in $^; do kubectl -n $(deploy-namespace) delete -f $$f; done
+	-oc delete ns $(deploy-namespace)
